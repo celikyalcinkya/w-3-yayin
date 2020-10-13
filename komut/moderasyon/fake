@@ -1,0 +1,42 @@
+module.exports = {
+    cfx: {
+        baslat: "fake" // komutunuzun on_ek ile çalıştılacak komut adı.
+    },
+run: async(client, message, args, Discord, db) => { 
+const snekfetch = require('snekfetch');
+const moment = require('moment');
+require('moment-duration-format')
+const hastebin = require('hastebin-gen') 
+let p = client.ayarlar.ON_EK
+    let an = []
+    if (!an) return message.channel.send(`Lütfen Bir Sayı Giriniz! Örn; \`${p}fake 100\``)
+    message.guild.members.forEach(f => {
+    let a = f.user
+    let b = new Date().getTime() - a.createdAt.getTime()
+    const gecen = moment.duration(b).format(`DD **[Day(s)]`)
+    if(a.bot) return;
+    let timing = moment.duration(Math.floor(args[0]), 'days').asMilliseconds()
+    if(b < timing) {
+    an.push(`**${a.tag}**` +' ' + `\`${gecen}\`\n`)
+    }
+    })
+    if(an == []) an = '[TR] => Fake Hesap Bulunmamaktadır!'
+    try {
+    message.channel.send(new Discord.RichEmbed().setColor(`GOLD`).setDescription(`${an} \n\n\n\n`).addField(`**Total:**  \`${an.length}\``, '** **').setTimestamp())
+    } catch(err) {
+        if(db.fetch(`dil_${message.guild.id}`) != "EN") {
+      hastebin(an.join('\n'), `\n\n\nToplam Fake Kullanıcı: ${an.length}`).then(r => {
+var h = r
+message.channel.send(h)
+})}
+      
+      
+           if(db.fetch(`dil_${message.guild.id}`) === "EN") {
+      hastebin(an.join('\n'), `\n\n\nTotal Fake Users: ${an.length}`).then(r => {
+var h = r
+message.channel.send(h)
+})}
+      
+    }
+    }
+}
